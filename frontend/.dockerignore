@@ -1,0 +1,17 @@
+.git
+.gitignore
+
+#Variables de entorno
+.env
+.env.*
+
+#Python
+__pycache__/
+*.pyc
+*.pyo
+
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
