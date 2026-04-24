@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TeamBoard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --accent:    #58a6ff;
+      --accent2:   #3fb950;
+      --warn:      #d29922;
+      --danger:    #f85149;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Sora', sans-serif;
+      --radius:    8px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── Header ────────────────────────────────────── */
+    header {
+      max-width: 900px;
+      margin: 0 auto 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
+
+    .header-left h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .header-left h1 span {
+      color: var(--accent);
+    }
+
+    .header-left p {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    /* ── Backend status badge ──────────────────────── */
+    #status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      transition: all 0.3s ease;
+    }
+
+    #status-badge.online {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    #status-badge.offline {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    #status-badge.online .dot {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    /* ── Main content ──────────────────────────────── */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Table wrapper ─────────────────────────────── */
+    .table-wrapper {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    thead tr {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    thead th {
+      padding: 14px 20px;
+      text-align: left;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: rgba(88, 166, 255, 0.04);
+    }
+
+    tbody td {
+      padding: 16px 20px;
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    .td-name {
+      font-weight: 600;
+    }
+
+    .td-legajo {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .td-feature {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--accent);
+    }
+
+    .td-service {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+    }
+
+    /* ── Estado pill ────────────────────────────────── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pill-ok {
+      background: rgba(63, 185, 80, 0.12);
+      color: var(--accent2);
+      border: 1px solid rgba(63, 185, 80, 0.3);
+    }
+
+    .pill-warn {
+      background: rgba(210, 153, 34, 0.12);
+      color: var(--warn);
+      border: 1px solid rgba(210, 153, 34, 0.3);
+    }
+
+    .pill-error {
+      background: rgba(248, 81, 73, 0.12);
+      color: var(--danger);
+      border: 1px solid rgba(248, 81, 73, 0.3);
+    }
+
+    /* ── Loading / error states ─────────────────────── */
+    #loading, #error-msg {
+      padding: 48px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    #error-msg {
+      color: var(--danger);
+      display: none;
+    }
+
+    /* ── Footer ─────────────────────────────────────── */
+    footer {
+      max-width: 900px;
+      margin: 40px auto 0;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <h1>Team<span>Board</span></h1>
+      <p>IS-2026 · Ingeniería y Calidad de Software</p>
+    </div>
+    <div id="status-badge">
+      <span class="dot"></span>
+      <span id="status-text">conectando…</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Integrante</th>
+            <th>Legajo</th>
+            <th>Feature</th>
+            <th>Servicio</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="team-tbody">
+          <tr>
+            <td colspan="5" id="loading">Cargando datos del equipo…</td>
+          </tr>
+        </tbody>
+      </table>
+      <p id="error-msg">No se pudo conectar con el backend.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>TeamBoard · docker compose up · <span id="year"></span></p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
